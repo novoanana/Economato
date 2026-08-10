@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<title>ECONOMATO · Pedidos</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#718096;--line:#e7ebf2;--accent:#5b5ce2;--accent2:#7c3aed;--green:#16a34a;--red:#dc2626;--shadow:0 10px 30px rgba(20,30,55,.08)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(160deg,#eef2ff 0,#f7f9fc 38%,#f4f7fb 100%);color:var(--text)}
+button,input,select,textarea{font:inherit}button{border:0;cursor:pointer}.app{max-width:620px;margin:auto;min-height:100vh;padding-bottom:96px}
+header{padding:20px 18px 12px;display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{display:flex;align-items:center;gap:12px}
+.logo{width:50px;height:50px;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:grid;place-items:center;font-weight:900;font-size:21px;box-shadow:0 10px 22px #5b5ce233}
+.brand h1{font-size:21px;margin:0}.brand p{margin:3px 0 0;color:var(--muted);font-size:12px}.iconbtn{width:44px;height:44px;border-radius:14px;background:#fff;box-shadow:var(--shadow);font-size:19px}
+.topactions{display:flex;gap:8px}.mini{padding:11px 13px;border-radius:13px;background:#fff;box-shadow:var(--shadow);font-weight:800;color:#334155}
+.search{margin:10px 18px 18px;position:relative}.search input{width:100%;padding:15px 16px 15px 46px;border:1px solid var(--line);border-radius:16px;background:#fff;outline:none;box-shadow:var(--shadow)}.search span{position:absolute;left:17px;top:13px;font-size:20px}
+.section{padding:0 18px}.sectiontitle{display:flex;justify-content:space-between;align-items:center;margin:8px 0 12px}.sectiontitle h2{font-size:15px;margin:0}.sectiontitle small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.provider{background:#fff;border:1px solid var(--line);border-radius:19px;padding:16px;min-height:130px;text-align:left;box-shadow:var(--shadow);transition:.15s}.provider:active{transform:scale(.98)}.provider .badge{width:42px;height:42px;border-radius:13px;background:#eef0ff;color:var(--accent);display:grid;place-items:center;font-weight:900;margin-bottom:13px}.provider strong{display:block;font-size:16px}.provider small{display:block;color:var(--muted);margin-top:5px}
+.back{display:flex;align-items:center;gap:8px;margin:8px 18px 14px}.back button{background:transparent;color:var(--accent);font-weight:800}.hero{margin:0 18px 16px;background:linear-gradient(135deg,#171d36,#323a72);color:#fff;border-radius:22px;padding:20px;box-shadow:0 14px 35px #20264b2e}.hero h2{margin:0 0 5px;font-size:22px}.hero p{margin:0;color:#cfd5ff;font-size:13px}
+.product{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid var(--line);border-radius:17px;padding:13px 12px;margin-bottom:9px;box-shadow:0 6px 20px rgba(20,30,55,.05)}.productname{font-weight:700;font-size:14px;line-height:1.25}.qty{display:flex;align-items:center;gap:8px;flex-shrink:0}.qty button{width:35px;height:35px;border-radius:11px;background:#eef0ff;color:var(--accent);font-size:20px;font-weight:800}.qty .num{min-width:25px;text-align:center;font-weight:800}
+.bottom{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(620px,100%);padding:12px 18px calc(12px + env(safe-area-inset-bottom));background:#ffffffeb;backdrop-filter:blur(12px);border-top:1px solid var(--line)}.cartbtn{width:100%;padding:16px;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:900;display:flex;justify-content:space-between;box-shadow:0 12px 24px #5b5ce233}
+.modal{position:fixed;inset:0;background:#0b1020aa;display:none;align-items:flex-end;justify-content:center;z-index:5}.modal.show{display:flex}.sheet{background:#fff;width:min(620px,100%);border-radius:26px 26px 0 0;padding:22px 18px calc(22px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto}.sheet h2{margin:0 0 4px}.sheet .sub{color:var(--muted);font-size:13px;margin-bottom:18px}
+.summary{border:1px solid var(--line);border-radius:17px;padding:8px 14px;margin-bottom:15px}.sumrow{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line);gap:15px}.sumrow:last-child{border-bottom:0}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.action{padding:15px;border-radius:15px;font-weight:900}.wa{background:#dcfce7;color:#15803d}.mail{background:#eef2ff;color:#4338ca}.secondary{background:#f1f5f9;color:#334155;margin-top:10px;width:100%;padding:14px;border-radius:15px;font-weight:800}
+.form{display:grid;gap:11px}.form label{font-size:12px;font-weight:800;color:#475569}.form input,.form select,.form textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:13px;background:#fff;outline:none}.form textarea{min-height:80px;resize:vertical}.primary{width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:900}.danger{background:#fee2e2;color:#b91c1c}
+.adminGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.adminCard{padding:16px;border-radius:17px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);text-align:left}.adminCard strong{display:block}.adminCard small{display:block;color:var(--muted);margin-top:4px}
+.history{margin-top:18px}.order{background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px;margin-bottom:10px}.orderhead{display:flex;justify-content:space-between;gap:8px}.order small{color:var(--muted)}.repeat{margin-top:10px;padding:9px 12px;border-radius:10px;background:#eef0ff;color:var(--accent);font-weight:800}
+.empty{padding:30px;text-align:center;color:var(--muted)}.status{margin:10px 18px;padding:11px 13px;border-radius:13px;background:#fff;border:1px solid var(--line);font-size:12px;color:var(--muted)}.status.ok{color:#166534;background:#f0fdf4}.status.err{color:#991b1b;background:#fef2f2}
+.toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%) translateY(20px);background:#111827;color:#fff;padding:12px 16px;border-radius:12px;opacity:0;pointer-events:none;transition:.25s;z-index:20;font-size:13px}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:380px){.grid{grid-template-columns:1fr}.adminGrid{grid-template-columns:1fr}.productname{font-size:13px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand">
+    <div class="logo">E</div>
+    <div><h1>ECONOMATO</h1><p>Gestión de pedidos</p></div>
+  </div>
+  <div class="topactions">
+    <button class="mini" onclick="openAdmin()">⚙️</button>
+    <button class="iconbtn" onclick="showHistory()">📋</button>
+  </div>
+</header>
+<div id="status" class="status">Conectando con la base de datos…</div>
+<div id="content"></div>
+</div>
+
+<div class="bottom" id="bottom" style="display:none"><button class="cartbtn" onclick="openSummary()"><span>🛒 Ver pedido</span><span id="cartCount">0 uds.</span></button></div>
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   ECONOMATO · CONFIGURACIÓN
+   ========================================================= */
+const API_URL="https://script.google.com/macros/s/AKfycbxbZAtJAO7iwbyCqYk3zA_z0piBkik4bBJ3Z5GMn884zzA7IaxAFuVMxpZvjm2TA1kr/exec";
+
+let providers=[];
+let articles=[];
+let current=null,cart={};
+
+const $=id=>document.getElementById(id);
+
+async function apiGet(action){
+  const r=await fetch(API_URL+"?accion="+encodeURIComponent(action)+"&t="+Date.now());
+  const data=await r.json();
+  if(!data.ok) throw new Error(data.error||"Error de API");
+  return data.datos||[];
+}
+
+async function apiPost(payload){
+  /*
+   * Apps Script puede redirigir la petición POST.
+   * no-cors permite enviar la operación desde una app HTML externa.
+   * Después recargamos los datos desde Google Sheets.
+   */
+  await fetch(API_URL,{
+    method:"POST",
+    mode:"no-cors",
+    headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body:JSON.stringify(payload)
+  });
+  await new Promise(r=>setTimeout(r,900));
+}
+
+async function cargarDatos(){
+  setStatus("Conectando con ECONOMATO_DB…","");
+
+  try{
+    const [ps,as]=await Promise.all([apiGet("proveedores"),apiGet("articulos")]);
+
+    providers=ps
+      .filter(p=>String(p.ACTIVO).toLowerCase()!=="false")
+      .map(p=>({
+        id:p.ID,
+        name:p.NOMBRE||"",
+        channel:String(p.CANAL||"whatsapp").toLowerCase(),
+        contact:p.CONTACTO||"",
+        emailCopia:p.EMAIL_COPIA||"",
+        products:[]
+      }));
+
+    articles=as
+      .filter(a=>String(a.ACTIVO).toLowerCase()!=="false");
+
+    providers.forEach(p=>{
+      p.products=articles
+        .filter(a=>String(a.PROVEEDOR_ID)===String(p.id))
+        .map(a=>a.NOMBRE)
+        .filter(Boolean)
+        .sort((a,b)=>a.localeCompare(b,"es",{sensitivity:"base"}));
+    });
+
+    setStatus("Conectado · datos cargados desde Google Sheets","ok");
+    renderHome();
+  }catch(e){
+    console.error(e);
+    setStatus("No se pudo cargar la base de datos: "+e.message,"err");
+    renderHome();
+  }
+}
+
+function setStatus(text,type){
+  const x=$("status");
+  x.textContent=text;
+  x.className="status"+(type?" "+type:"");
+}
+
+function renderHome(filter=""){
+  const list=providers.filter(p=>p.name.toLowerCase().includes(filter.toLowerCase()));
+  $("content").innerHTML=
+    `<div class="search"><span>⌕</span><input id="providerSearch" placeholder="Buscar proveedor..." value="${esc(filter)}" oninput="renderHome(this.value)"></div>
+    <div class="section">
+      <div class="sectiontitle"><h2>Proveedores</h2><small>${list.length} disponibles</small></div>
+      <div class="grid">${list.map(p=>
+        `<button class="provider" onclick="openProvider('${escAttr(p.id)}')">
+          <div class="badge">${esc((p.name||"?")[0].toUpperCase())}</div>
+          <strong>${esc(p.name)}</strong>
+          <small>${p.products.length} artículos · ${p.channel==="whatsapp"?"WhatsApp":"Email"}</small>
+        </button>`
+      ).join("")||'<div class="empty">No hay proveedores creados todavía.</div>'}</div>
+    </div>`;
+  $("bottom").style.display="none";
+}
+
+function openProviderWithCart(id){
+  openProvider(id);
+  Object.keys(cart).forEach(n=>{const el=$("q-"+slug(n));if(el)el.textContent=cart[n]});
+  updateCart();
+  openSummary();
+}
+
+function openProvider(id,filter=""){
+  current=providers.find(p=>String(p.id)===String(id));
+  if(!current)return;
+  cart={};
+
+  const list=current.products.filter(x=>x.toLowerCase().includes(filter.toLowerCase()));
+
+  $("content").innerHTML=
+    `<div class="back"><button onclick="renderHome()">← Proveedores</button></div>
+    <div class="hero"><h2>${esc(current.name)}</h2><p>${current.products.length} artículos · Pedido por ${current.channel==="whatsapp"?"WhatsApp":"email"}</p></div>
+    <div class="search"><span>⌕</span><input id="productSearch" placeholder="Buscar artículo..." value="${esc(filter)}" oninput="openProvider('${escAttr(id)}',this.value)"></div>
+    <div class="section">${list.map((x,i)=>
+      `<div class="product"><div class="productname">${esc(x)}</div>
+      <div class="qty"><button onclick="changeQtyByIndex(${i},-1)">−</button><div class="num" id="q-${slug(x)}">0</div><button onclick="changeQtyByIndex(${i},1)">+</button></div></div>`
+    ).join("")||'<div class="empty">No se encontró ningún artículo.</div>'}</div>`;
+
+  $("bottom").style.display="block";
+  updateCart();
+}
+
+function changeQtyByIndex(i,delta){
+  const filter=(document.getElementById("productSearch")?.value||"").toLowerCase();
+  const list=current.products.filter(x=>x.toLowerCase().includes(filter));
+  changeQty(list[i],delta);
+}
+
+function changeQty(name,delta){
+  if(!name)return;
+  cart[name]=Math.max(0,(cart[name]||0)+delta);
+  if(!cart[name])delete cart[name];
+  const el=$("q-"+slug(name));if(el)el.textContent=cart[name]||0;
+  updateCart();
+}
+
+function updateCart(){
+  const n=Object.values(cart).reduce((a,b)=>a+b,0);
+  $("cartCount").textContent=n+" uds.";
+}
+
+function openSummary(){
+  if(!current||!Object.keys(cart).length){toast("Añade al menos un artículo");return}
+
+  const rows=Object.entries(cart).sort((a,b)=>a[0].localeCompare(b[0],"es",{sensitivity:"base"}));
+  $("sheet").innerHTML=
+    `<h2>Resumen del pedido</h2>
+    <div class="sub">${esc(current.name)} · ${new Date().toLocaleDateString("es-ES")}</div>
+    <div class="summary">${rows.map(([n,q])=>`<div class="sumrow"><strong>${q}</strong><span>${esc(n)}</span></div>`).join("")}</div>
+    <div class="actions">
+      <button class="action wa" onclick="sendOrder('whatsapp')">📱 WhatsApp</button>
+      <button class="action mail" onclick="sendOrder('email')">✉️ Email</button>
+    </div>
+    <button class="secondary" onclick="closeModal()">Seguir modificando</button>`;
+  $("modal").classList.add("show");
+}
+
+function buildOrderText(){
+  const lines=Object.entries(cart)
+    .sort((a,b)=>a[0].localeCompare(b[0],"es",{sensitivity:"base"}))
+    .map(([n,q])=>`${q} ${n}`)
+    .join("\n");
+
+  return `🏨 ECONOMATO\n${current.name}\n\nHola, os paso el pedido:\n\n${lines}\n\nGracias.\n\n— ECONOMATO`;
+}
+
+async function sendOrder(channel){
+  const text=buildOrderText();
+
+  const record={
+    id:Date.now(),
+    date:new Date().toLocaleString("es-ES"),
+    provider:current.name,
+    items:{...cart},
+    channel:channel
+  };
+
+  const history=JSON.parse(localStorage.getItem("economato_orders")||"[]");
+  history.unshift(record);
+  localStorage.setItem("economato_orders",JSON.stringify(history.slice(0,100)));
+
+  /*
+   * Guardamos también el pedido en PEDIDOS/LINEAS_PEDIDO.
+   * La app continúa funcionando aunque el navegador no permita
+   * leer la respuesta del POST.
+   */
+  apiPost({
+    accion:"crear_pedido",
+    proveedor_id:current.id,
+    proveedor_nombre:current.name,
+    canal:channel,
+    destinatario:channel==="whatsapp"?current.contact:current.contact,
+    lineas:Object.entries(cart).map(([n,q])=>{
+      const a=articles.find(x=>String(x.PROVEEDOR_ID)===String(current.id)&&String(x.NOMBRE)===String(n));
+      return {
+        articulo_id:a?a.ID:"",
+        articulo_nombre:n,
+        cantidad:q
+      };
+    })
+  }).catch(console.error);
+
+  if(channel==="whatsapp"){
+    const phone="34"+String(current.contact||"").replace(/\D/g,"").replace(/^34/,"");
+    if(phone.length<11){toast("El proveedor no tiene un WhatsApp válido");return}
+    window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(text),"_blank");
+  }else{
+    const to=String(current.contact||"").trim();
+    const cc=String(current.emailCopia||"").trim();
+    const subject="Pedido "+current.name;
+    let url="mailto:"+encodeURIComponent(to)+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(text);
+    if(cc)url+="&cc="+encodeURIComponent(cc);
+    window.location.href=url;
+  }
+
+  toast("Pedido preparado y guardado");
+  closeModal();
+}
+
+function openAdmin(){
+  $("sheet").innerHTML=
+    `<h2>Administración</h2>
+    <div class="sub">Desde aquí puedes crear proveedores y artículos. Se guardarán directamente en ECONOMATO_DB.</div>
+    <div class="adminGrid">
+      <button class="adminCard" onclick="formProveedor()"><strong>➕ Proveedor</strong><small>Crear o preparar un proveedor</small></button>
+      <button class="adminCard" onclick="formArticulo()"><strong>➕ Artículo</strong><small>Asignarlo a un proveedor</small></button>
+    </div>
+    <button class="secondary" onclick="closeModal()">Cerrar</button>`;
+  $("modal").classList.add("show");
+}
+
+function formProveedor(){
+  $("sheet").innerHTML=
+    `<h2>Nuevo proveedor</h2><div class="sub">Los datos se escribirán en la pestaña PROVEEDORES.</div>
+    <div class="form">
+      <div><label>Nombre *</label><input id="p_nombre" placeholder="Ej. Coca Cola"></div>
+      <div><label>Canal *</label><select id="p_canal"><option value="whatsapp">WhatsApp</option><option value="email">Email</option></select></div>
+      <div><label>Contacto *</label><input id="p_contacto" placeholder="Teléfono o email"></div>
+      <div><label>Email para copia</label><input id="p_copia" type="email" placeholder="copia@hotel.com"></div>
+      <button class="primary" onclick="crearProveedorApp()">Guardar proveedor</button>
+      <button class="secondary" onclick="openAdmin()">Volver</button>
+    </div>`;
+}
+
+async function crearProveedorApp(){
+  const nombre=$("p_nombre").value.trim();
+  const canal=$("p_canal").value;
+  const contacto=$("p_contacto").value.trim();
+  const copia=$("p_copia").value.trim();
+
+  if(!nombre||!contacto){toast("Completa nombre y contacto");return}
+
+  toast("Guardando proveedor…");
+  try{
+    await apiPost({accion:"crear_proveedor",nombre,canal,contacto,email_copia:copia});
+    await cargarDatos();
+    toast("Proveedor creado correctamente");
+    closeModal();
+  }catch(e){
+    toast("No se pudo guardar: "+e.message);
+  }
+}
+
+function formArticulo(){
+  if(!providers.length){
+    $("sheet").innerHTML=`<h2>Nuevo artículo</h2><div class="empty">Primero debes crear al menos un proveedor.</div><button class="secondary" onclick="formProveedor()">Crear proveedor</button>`;
+    return;
+  }
+
+  $("sheet").innerHTML=
+    `<h2>Nuevo artículo</h2><div class="sub">Los datos se escribirán en la pestaña ARTICULOS.</div>
+    <div class="form">
+      <div><label>Proveedor *</label><select id="a_proveedor">${providers.map(p=>`<option value="${escAttr(p.id)}">${esc(p.name)}</option>`).join("")}</select></div>
+      <div><label>Nombre del artículo *</label><input id="a_nombre" placeholder="Ej. Coca Cola 330 ml"></div>
+      <div><label>Código</label><input id="a_codigo" placeholder="Código interno"></div>
+      <div><label>Formato</label><input id="a_formato" placeholder="Caja 24 uds"></div>
+      <div><label>Unidad</label><input id="a_unidad" placeholder="Unidad, caja, botella…"></div>
+      <div><label>Observaciones</label><textarea id="a_obs" placeholder="Opcional"></textarea></div>
+      <button class="primary" onclick="crearArticuloApp()">Guardar artículo</button>
+      <button class="secondary" onclick="openAdmin()">Volver</button>
+    </div>`;
+}
+
+async function crearArticuloApp(){
+  const proveedor_id=$("a_proveedor").value;
+  const nombre=$("a_nombre").value.trim();
+  const codigo=$("a_codigo").value.trim();
+  const formato=$("a_formato").value.trim();
+  const unidad=$("a_unidad").value.trim();
+  const observaciones=$("a_obs").value.trim();
+
+  if(!proveedor_id||!nombre){toast("Selecciona proveedor y escribe el nombre");return}
+
+  toast("Guardando artículo…");
+  try{
+    await apiPost({accion:"crear_articulo",proveedor_id,nombre,codigo,formato,unidad,observaciones});
+    await cargarDatos();
+    toast("Artículo creado correctamente");
+    closeModal();
+  }catch(e){
+    toast("No se pudo guardar: "+e.message);
+  }
+}
+
+function showHistory(){
+  const h=JSON.parse(localStorage.getItem("economato_orders")||"[]");
+  $("sheet").innerHTML=
+    `<h2>Historial de pedidos</h2><div class="sub">Pedidos realizados desde este dispositivo.</div>
+    <div class="history">${h.length?h.map(o=>
+      `<div class="order"><div class="orderhead"><strong>${esc(o.provider)}</strong><small>${esc(o.date)}</small></div>
+      <small>${Object.values(o.items).reduce((a,b)=>a+b,0)} unidades · ${o.channel==="whatsapp"?"WhatsApp":"Email"}</small>
+      <button class="repeat" onclick="repeatOrder(${o.id})">↻ Repetir pedido</button></div>`
+    ).join(""):'<div class="empty">Todavía no hay pedidos.</div>'}</div>
+    <button class="secondary" onclick="closeModal()">Cerrar</button>`;
+  $("modal").classList.add("show");
+}
+
+function repeatOrder(id){
+  const h=JSON.parse(localStorage.getItem("economato_orders")||"[]"),o=h.find(x=>x.id===id);
+  if(!o)return;
+  current=providers.find(p=>p.name===o.provider);
+  if(!current){toast("El proveedor ya no está activo");return}
+  cart={...o.items};
+  closeModal();
+  openProviderWithCart(current.id);
+}
+
+function closeModal(){$("modal").classList.remove("show")}
+$("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal()});
+
+function slug(s){
+  try{return btoa(unescape(encodeURIComponent(s))).replace(/[^a-zA-Z0-9]/g,"").slice(0,30)}
+  catch(e){return String(s).replace(/\W/g,"").slice(0,30)}
+}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function escAttr(s){return esc(s).replace(/`/g,"&#96;")}
+function toast(t){const x=$("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),2600)}
+
+cargarDatos();
+</script>
+</body>
+</html>
