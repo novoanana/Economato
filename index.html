@@ -70,13 +70,13 @@ function updateCart(){const n=Object.values(cart).reduce((a,b)=>a+b,0);$('cartCo
 function openSummary(){
  if(!current||!Object.keys(cart).length){toast("Añade al menos un artículo");return}
  $('sheet').innerHTML=`<h2>Resumen del pedido</h2><div class="sub">${esc(current.name)} · ${new Date().toLocaleDateString('es-ES')}</div>
- <div class="summary">${Object.entries(cart).sort((a,b)=>a[0].localeCompare(b[0],'es',{sensitivity:'base'})).map(([n,q])=>`<div class="sumrow"><span>${esc(n)}</span><strong>${q}</strong></div>`).join("")}</div>
+ <div class="summary">${Object.entries(cart).sort((a,b)=>a[0].localeCompare(b[0],'es',{sensitivity:'base'})).map(([n,q])=>`<div class="sumrow"><strong>${q}</strong><span>${esc(n)}</span></div>`).join("")}</div>
  <div class="actions"><button class="action wa" onclick="sendOrder()">📱 WhatsApp</button><button class="action mail" onclick="sendOrder()">✉️ Email</button></div>
  <button class="secondary" onclick="closeModal()">Seguir modificando</button>`;
  $('modal').classList.add('show');
 }
 function sendOrder(){
- const lines=Object.entries(cart).sort((a,b)=>a[0].localeCompare(b[0],'es',{sensitivity:'base'})).map(([n,q])=>`${n} — ${q}`).join("\n");
+ const lines=Object.entries(cart).sort((a,b)=>a[0].localeCompare(b[0],'es',{sensitivity:'base'})).map(([n,q])=>`${q} ${n}`).join("\n");
  const text=`Hola, os paso el pedido:\n\n${lines}\n\nGracias.`;
  const record={id:Date.now(),date:new Date().toLocaleString('es-ES'),provider:current.name,items:{...cart},channel:current.channel};
  const history=JSON.parse(localStorage.getItem('economato_orders')||"[]"); history.unshift(record); localStorage.setItem('economato_orders',JSON.stringify(history.slice(0,100)));
