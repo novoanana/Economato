@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<title>ECONOMATO · Hotel Yaramar · V6</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#718096;--line:#e7ebf2;--accent:#5b5ce2;--accent2:#7c3aed;--green:#16a34a;--red:#dc2626;--shadow:0 10px 30px rgba(20,30,55,.08)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(160deg,#eef2ff 0,#f7f9fc 38%,#f4f7fb 100%);color:var(--text)}
+button,input,select,textarea{font:inherit}button{border:0;cursor:pointer}.app{max-width:620px;margin:auto;min-height:100vh;padding-bottom:96px}
+header{padding:20px 18px 12px;display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{display:flex;align-items:center;gap:12px}
+.logo{width:50px;height:50px;border-radius:16px;background:#fff;display:grid;place-items:center;overflow:hidden;box-shadow:0 10px 22px #5b5ce233;border:1px solid var(--line)}.logo img{width:100%;height:100%;object-fit:contain;padding:4px}
+.brand h1{font-size:21px;margin:0}.brand p{margin:3px 0 0;color:var(--muted);font-size:12px}.headerbuttons{display:flex;gap:8px}.iconbtn{width:44px;height:44px;border-radius:14px;background:#fff;box-shadow:var(--shadow);font-size:19px}
+.status{margin:8px 18px;padding:9px 12px;border-radius:12px;background:#fff;border:1px solid var(--line);font-size:12px;color:var(--muted)}.status.ok{color:#166534;background:#f0fdf4}.status.err{color:#991b1b;background:#fef2f2}
+.search{margin:10px 18px 18px;position:relative}.search input{width:100%;padding:15px 16px 15px 46px;border:1px solid var(--line);border-radius:16px;background:#fff;outline:none;box-shadow:var(--shadow)}.search span{position:absolute;left:17px;top:13px;font-size:20px}
+.section{padding:0 18px}.sectiontitle{display:flex;justify-content:space-between;align-items:center;margin:8px 0 12px}.sectiontitle h2{font-size:15px;margin:0}.sectiontitle small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.provider{background:#fff;border:1px solid var(--line);border-radius:19px;padding:16px;min-height:130px;text-align:left;box-shadow:var(--shadow);transition:.15s}.provider:active{transform:scale(.98)}.provider .badge{width:42px;height:42px;border-radius:13px;background:#eef0ff;color:var(--accent);display:grid;place-items:center;font-weight:900;margin-bottom:13px}.provider strong{display:block;font-size:16px}.provider small{display:block;color:var(--muted);margin-top:5px}
+.back{display:flex;align-items:center;gap:8px;margin:8px 18px 14px}.back button{background:transparent;color:var(--accent);font-weight:800}.hero{margin:0 18px 16px;background:linear-gradient(135deg,#171d36,#323a72);color:#fff;border-radius:22px;padding:20px;box-shadow:0 14px 35px #20264b2e}.hero h2{margin:0 0 5px;font-size:22px}.hero p{margin:0;color:#cfd5ff;font-size:13px}
+.product{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid var(--line);border-radius:17px;padding:13px 12px;margin-bottom:9px;box-shadow:0 6px 20px rgba(20,30,55,.05)}.productname{font-weight:700;font-size:14px;line-height:1.25}.qty{display:flex;align-items:center;gap:8px;flex-shrink:0}.qty button{width:35px;height:35px;border-radius:11px;background:#eef0ff;color:var(--accent);font-size:20px;font-weight:800}.qty .num{min-width:25px;text-align:center;font-weight:800}
+.bottom{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(620px,100%);padding:12px 18px calc(12px + env(safe-area-inset-bottom));background:#ffffffeb;backdrop-filter:blur(12px);border-top:1px solid var(--line);z-index:4}.cartbtn{width:100%;padding:16px;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:900;display:flex;justify-content:space-between;box-shadow:0 12px 24px #5b5ce233}
+.modal{position:fixed;inset:0;background:#0b1020aa;display:none;align-items:flex-end;justify-content:center;z-index:10}.modal.show{display:flex}.sheet{background:#fff;width:min(620px,100%);border-radius:26px 26px 0 0;padding:22px 18px calc(22px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto}.sheet h2{margin:0 0 4px}.sheet .sub{color:var(--muted);font-size:13px;margin-bottom:18px}
+.summaryBrand{display:flex;align-items:center;gap:10px;margin:4px 0 14px}.summaryLogo{width:58px;height:58px;border-radius:15px;background:#fff;display:grid;place-items:center;overflow:hidden;box-shadow:0 8px 18px #5b5ce233;border:1px solid var(--line)}.summaryLogo img{width:100%;height:100%;object-fit:contain;padding:4px}.summaryBrand strong{display:block;font-size:16px}.summaryBrand small{display:block;color:var(--muted);margin-top:2px}.messagePreview{background:#f8fafc;border:1px solid var(--line);border-radius:15px;padding:13px 14px;margin-bottom:15px;font-size:13px;line-height:1.45;white-space:pre-line}.summary{border:1px solid var(--line);border-radius:17px;padding:8px 14px;margin-bottom:15px}.sumrow{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line);gap:15px}.sumrow:last-child{border-bottom:0}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.action{padding:15px;border-radius:15px;font-weight:900}.wa{background:#dcfce7;color:#15803d}.mail{background:#eef2ff;color:#4338ca}.secondary{background:#f1f5f9;color:#334155;margin-top:10px;width:100%;padding:14px;border-radius:15px;font-weight:800}
+.form{display:grid;gap:11px}.form label{font-size:12px;font-weight:800;color:#475569}.form input,.form select,.form textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:13px;background:#fff;outline:none}.form textarea{min-height:80px;resize:vertical}.primary{width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:900}.danger{width:100%;padding:13px;border-radius:14px;background:#fee2e2;color:#b91c1c;font-weight:900;margin-top:8px}
+.adminGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.adminCard{padding:16px;border-radius:17px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);text-align:left}.adminCard strong{display:block}.adminCard small{display:block;color:var(--muted);margin-top:4px}
+.listitem{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px;margin-bottom:9px;display:flex;justify-content:space-between;align-items:center;gap:10px}.listitem strong{display:block}.listitem small{display:block;color:var(--muted);margin-top:4px}.listbuttons{display:flex;gap:6px;flex-shrink:0}.mini{padding:9px 10px;border-radius:10px;background:#eef0ff;color:var(--accent);font-weight:800}.mini.red{background:#fee2e2;color:#b91c1c}
+.history{margin-top:18px}.order{background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px;margin-bottom:10px}.orderhead{display:flex;justify-content:space-between;gap:8px}.order small{color:var(--muted)}.repeat{margin-top:10px;padding:9px 12px;border-radius:10px;background:#eef0ff;color:var(--accent);font-weight:800}
+.empty{padding:30px;text-align:center;color:var(--muted)}.toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%) translateY(20px);background:#111827;color:#fff;padding:12px 16px;border-radius:12px;opacity:0;pointer-events:none;transition:.25s;z-index:30;font-size:13px;max-width:90%;text-align:center}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:380px){.grid{grid-template-columns:1fr}.adminGrid{grid-template-columns:1fr}.productname{font-size:13px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand">
+    <div class="logo"><img src="data:image/png;base64,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" alt="ML Hoteles"></div>
+    <div><h1>ECONOMATO</h1><p>Hotel Yaramar · Gestión de pedidos</p></div>
+  </div>
+  <div class="headerbuttons">
+    <button class="iconbtn" onclick="recargarDatos()" title="Actualizar datos">↻</button>
+    <button class="iconbtn" onclick="openAdmin()" title="Administración">⚙️</button>
+    <button class="iconbtn" onclick="showHistory()" title="Historial">📋</button>
+  </div>
+</header>
+<div id="status" class="status">Conectando con Google Sheets…</div>
+<div id="content"></div>
+</div>
+<div class="bottom" id="bottom" style="display:none"><button class="cartbtn" onclick="openSummary()"><span>🛒 Ver pedido</span><span id="cartCount">0 uds.</span></button></div>
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const API_URL="https://script.google.com/macros/s/AKfycbxbZAtJAO7iwbyCqYk3zA_z0piBkik4bBJ3Z5GMn884zzA7IaxAFuVMxpZvjm2TA1kr/exec";
+const LOGO="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKgAAACjCAMAAAApUqVFAAAAmVBMVEX///8YGjYAABwAAAAAACkUFjQAACcAACPPz9P5+frk5OYAAB/z8/QWGDW7u8Ds7O5naHWGho9gYW8AABMLDjDd3d+UlJugoKhycn5OT2AmJz8AAAoAABcAACx8fIfW1tnFxcowMEVWVmJMTFUcHS6ysrZdXmeqqrB8fIAmJysoKDtCQ1FDRFc5OUwiIjcuLz8oKDNtbXIMDikBvPDoAAAII0lEQVR4nO1ci3aqOhAVIbzkIRhAaxW0RXprbW/7/x93gYLKZKI9R4Jdd2WvdU5bGWGbTGb2TNKORhISEhISEhISEhISEhISEv9L+FFkO/cm8SPY+e4fdXaYJlnq35vLNdj5ZqmPZ9riJYnuzeUK/IBSxaW69rpPfvm4pk+GUsKl49k0+9VO68/HSg1X18P83mwuIp6Qb6qKZryZ92ZzCbHeMlXo7OU3r6t40hJV3MnhN89/MD4yLQd194sXVWicmCqTxeXpT9P7JTV7T8+Yau8X19TmY/+0m3v3IWtS94wpUb0LtsGEUKrN1E1uD8bvhHimnDN9vsA0VVtv3sTD5zNrvzpnSicp19RX2nBGjI/hY4R5fPw3U4M7r9ZaP5mp88EHda2dE1U0fpQqJmd2xnZoT/WfO0OqTGKepflwbrmiQzONxx2i7pIXpJzteTBT6GZgpv5Xd0jpk8WxhF4SDhxTk0nn+YrOm/ysO/bK+GVQnqNo3x1ScuDlUrVLVFGzIXmWOac7pcok4Bi+AUO6H3byHcPtElA5QbJ4BENq8D6SIEz17vP1OW4XjcEnIu/Drvxo2SVAXnEv9Re0S5TvJWJgzeGQcp4fG4CoovJimRjkendI6QGf0hyOqGJwE5kQ+E+AwWOB2kUHAojSp2EXfgzmnr7idjtmSOklsd0/fCaW4xmfddKhI9QCxHItRM1s+IFKdx5WmWaz7vPJBx6hZtBJFa7aEgN/A7xPx5cTzA2XBKwYQO+jW3RK4ciXhsqwRDOlG0pdA53SSGHmfuCYb8FQimdHZ6pBoo/ZoEQZ/eyquBkToLSBA9QPQyl0kdJJd8MSHb2BuddQsefvoZOS/cDN1RyG0j2qTKYrQNQdOIuO7PfuWLkrtHGTQ5mvTPCQKwznPZsa+gsWeCwmi2rzYQPUqACRhzygMf8AFRTF7cQh+gDrZJlhZjGIY6Xd0FsVux9JqBSWeMo4GZgoXPfuDLPqNtQrrLYDE2XWCZodrReooMh4YKKjEMz9Co35BRNJDX6jWgzg3NMnbD2nr9BJOeJVHFIg4lw3w8wYJ9XWAxN1PoH74fI9gAqKo7IFApbN2hYr20246Mhm6P3p9B3o/BkmTKwJVFDjgXVJ6X6AwgxdJkyJJ7iz47CeBdtleCyH0UHRFkI7Oz4b/qD7kQmmjGB0KF1E6GryM4aFNYPFaIa9kelB4fqlL9g5O1wwOeGlW8A4qdAKL4pZolDAU3TP0WM06UEo0YAl2t3Cr0Iklsedf4GTkmeRTpqGLFF/CxsRaIiEJavYPql5QKYV7jrh3sfs5AhtQ5g6QjSnsJ+POSnTKNU+BVZ4mYpw8KGIQ7fHLFji0TeBhZOHcoCbSfjGA2xTulomjmihYpIDVpl4ieeBrWZlLPCcSYD2waD7kXfsvcxOjjYVR3SOHnSyHrpz735hkdSCGptQcaspVNGCHAp4DbWKYUcX9aN+cBijwc+DRNGTDukXdFJxbQgN3+9ON+CUCV4RQam3wrem+oBK37CXrc+ukxIFrYigzCcfopzUUQm+5Qnd7xHN49kSEH0X1YaIVPIvesEEu+J4uvfBCQ93JcpJs6XLEWfgdBk9oB1duJOjizpelIxdBZ8tKPPx0zAFSE7C2hCB4dIMvQJFHF4RZS7Q2JyPfTNCqlC8uwWzqI72lthzE4LE857y5K4DsijBK6LPH2nsm+HsCSfpMOuEfKDpcQ0apXhYvhnpK+HUmNU6AxRQDcemeyEh3yN8Xe6BSKqhvSWGqJg2RK3RObocpnu8Igpgj5x3Vu4mfNfFnDNrDujZ0A028p+wZub48m3IJtXski/cSefdwXLHGWvDHtfiuMhtIOTSbMHzA5jYLJgzBqXM77v17Eybp7gGKiVSsOy1BWNiUmZASx/R+62arZOYJM/odC1hjxyupojZvP1muukxPTmevjrxcI2FyToqpNGNPJaffKE8q1/j2Kf+bfE0Mit4eXAA58Ho4yLJs/rqUf/ACu+UHq3qFg/skbLT7ZaboPBq/J3HzpWHEtQwmLFwqaG71cWvo0iB+p0+tVf8nW4YfJq1sW6saAnj72r9qe5W4Ny8ukRmx1RpA/1OPloN50O1it+u+qffRPQSTkT9N1p/ppJ9BZes2sEuiV69T4O/JLpTx9egHqfeelGNChO9hqaN2xMm/m559T7t7cQdibq6XC1r4JMuEhISEr8Px35GdPzvhObH5heqHbMUFlXg9M0G5et2/U1VdPithrGik6SxM8/spyKZZd9f8zpvdE+NOE3Si2vd48/jPI/X5fOjpCgWcZEUfpmz4qIoksogbzOuPU+q16pPWawLrwh62SJ5SOrkYoW1cpt2iTaVSc1jtKtHJm26FMH3+FnB8R1eK5LtpM1XzqL6zumlIgnzrPoSm9eI5k3mj7NvonZD9ChaT0SPG+pej03ShVXNrx04az7RoiIaN97s5R2iMTKix3LGOerWHoiOkqyk4o0QotYhrrGoOAbNysqSDtF1UFlE50RLZ65QDXW2CLIbS5ET0VFolaNqYURD3y7h14vpSLToEA3SysQadUY0al+rHHa97qUWXVRPKJ0QI9rx0bhZEnl36i/6aPPztI8xLYk66+noOlFz3TCL/pToaN1HJK16CVVIboh2rnXDU1yUz7eSZvEjiylriR7XullzN3vplrXtY6u+29s2DMNtG6CdZvutmfViN50e/9ZO43jWS/2Oin3+UX4Xlive3tavlW/y4+l0Hq7v8Fci/tzZrF/+t5kkJCQkJCQkJCQkJCQkJCRuxX/QQYLL/Qdu5wAAAABJRU5ErkJggg==";
+let providers=[], articles=[], current=null, cart={}, homeFilter="", productFilter="";
+
+const $=id=>document.getElementById(id);
+
+async function apiGet(action){
+  const r=await fetch(API_URL+"?accion="+encodeURIComponent(action)+"&t="+Date.now(),{cache:"no-store"});
+  if(!r.ok) throw new Error("Error HTTP "+r.status);
+  const d=await r.json();
+  if(!d.ok) throw new Error(d.error||"Error en API");
+  return d.datos||[];
+}
+async function apiPost(payload){
+  const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
+  if(!r.ok) throw new Error("Error HTTP "+r.status);
+  const d=await r.json();
+  if(!d.ok) throw new Error(d.error||"Error en API");
+  return d;
+}
+function first(o,keys){for(const k of keys){if(o && o[k]!==undefined && o[k]!==null && String(o[k]).trim()!=="") return o[k]}return ""}
+function normProvider(p){
+  const whatsappField=String(first(p,["WHATSAPP","whatsapp"])).trim();
+  const emailField=String(first(p,["EMAIL","email"])).trim();
+  const legacyContact=String(first(p,["CONTACTO","contacto"])).trim();
+  const canal=String(first(p,["CANAL","canal"])).toLowerCase();
+
+  // Compatibilidad total con proveedores antiguos:
+  // - Si WHATSAPP/EMAIL ya existen, tienen prioridad.
+  // - Si están vacíos, recuperamos el dato de CONTACTO.
+  // - Si CONTACTO contiene @, lo tratamos como email.
+  // - Si es un teléfono, lo tratamos como WhatsApp.
+  let whatsapp=whatsappField;
+  let email=emailField;
+
+  if(!whatsapp && !email && legacyContact){
+    if(legacyContact.includes("@")){
+      email=legacyContact;
+    }else{
+      whatsapp=legacyContact;
+    }
+  }else{
+    if(!whatsapp && (canal==="whatsapp" || canal==="ambos") && legacyContact && !legacyContact.includes("@")){
+      whatsapp=legacyContact;
+    }
+    if(!email && (canal==="email" || canal==="ambos") && legacyContact && legacyContact.includes("@")){
+      email=legacyContact;
+    }
+  }
+
+  return {
+    id:first(p,["ID","id"]),
+    name:String(first(p,["NOMBRE","nombre"])),
+    whatsapp,
+    email,
+    emailCopia:String(first(p,["EMAIL_COPIA","email_copia"])),
+    active:String(first(p,["ACTIVO","activo"])).toLowerCase()!=="false"
+  };
+}
+function normArticle(a){
+  return {
+    id:first(a,["ID","id"]),
+    providerId:first(a,["PROVEEDOR_ID","proveedor_id"]),
+    name:String(first(a,["NOMBRE","nombre"])),
+    codigo:String(first(a,["CODIGO","codigo"])),
+    formato:String(first(a,["FORMATO","formato"])),
+    unidad:String(first(a,["UNIDAD","unidad"])),
+    observaciones:String(first(a,["OBSERVACIONES","observaciones"])),
+    active:String(first(a,["ACTIVO","activo"])).toLowerCase()!=="false"
+  };
+}
+async function cargarDatos(){
+  const [p,a]=await Promise.all([apiGet("proveedores"),apiGet("articulos")]);
+  providers=p.map(normProvider).filter(x=>x.active).sort((a,b)=>a.name.localeCompare(b.name,"es",{sensitivity:"base"}));
+  articles=a.map(normArticle).filter(x=>x.active).sort((a,b)=>a.name.localeCompare(b.name,"es",{sensitivity:"base"}));
+  $("status").textContent="● Conectado · datos de Google Sheets";
+  $("status").className="status ok";
+}
+async function recargarDatos(){
+  try{
+    $("status").textContent="● Actualizando datos…";
+    $("status").className="status";
+    await cargarDatos();
+    renderHome(homeFilter);
+    toast("Datos actualizados");
+  }catch(e){
+    setError(e);
+  }
+}
+function setError(e){$("status").textContent="● Error de conexión: "+e.message;$("status").className="status err"}
+function renderHome(filter=""){
+  homeFilter=filter;
+  const list=providers.filter(p=>p.name.toLowerCase().includes(String(filter).toLowerCase()));
+  $("content").innerHTML=`<div class="search"><span>⌕</span><input id="providerSearch" placeholder="Buscar proveedor…" value="${esc(filter)}"></div>
+  <div class="section"><div class="sectiontitle"><h2>Proveedores</h2><small>${list.length} activos</small></div>
+  <div class="grid">${list.length?list.map(p=>`<button class="provider" onclick="openProvider('${escAttr(p.id)}')"><div class="badge">${esc(p.name.charAt(0).toUpperCase())}</div><strong>${esc(p.name)}</strong><small>${articles.filter(a=>String(a.providerId)===String(p.id)).length} artículos · ${p.whatsapp&&p.email?"WhatsApp + Email":p.whatsapp?"WhatsApp":p.email?"Email":"Sin contacto"}</small></button>`).join(""):`<div class="empty">No hay proveedores activos todavía.<br><br>Entra en ⚙️ para crear el primero.</div>`}</div></div>`;
+  $("providerSearch").oninput=e=>renderHome(e.target.value);
+  $("bottom").style.display="none";
+}
+function openProvider(id,filter=""){
+  current=providers.find(p=>String(p.id)===String(id)); productFilter=filter; cart=Object.keys(cart).length?cart:{};
+  if(!current){toast("Proveedor no encontrado");return}
+  const list=articles.filter(a=>String(a.providerId)===String(current.id)&&a.name.toLowerCase().includes(String(filter).toLowerCase()));
+  $("content").innerHTML=`<div class="back"><button onclick="renderHome()">← Proveedores</button></div>
+  <div class="hero"><h2>${esc(current.name)}</h2><p>${articles.filter(a=>String(a.providerId)===String(current.id)).length} artículos · ${current.whatsapp&&current.email?"WhatsApp + Email":current.whatsapp?"WhatsApp":current.email?"Email":"Sin contacto"}</p></div>
+  <div class="search"><span>⌕</span><input id="productSearch" placeholder="Buscar artículo…" value="${esc(filter)}"></div>
+  <div class="section">${list.length?list.map(a=>`<div class="product"><div class="productname">${esc(a.name)}${a.formato?`<small style="display:block;color:#718096;font-weight:500;margin-top:3px">${esc(a.formato)}</small>`:""}</div><div class="qty"><button onclick="changeQty('${escAttr(a.id)}',-1)">−</button><div class="num" id="q-${slug(a.id)}">${cart[a.id]||0}</div><button onclick="changeQty('${escAttr(a.id)}',1)">+</button></div></div>`).join(""):`<div class="empty">No hay artículos para este proveedor.</div>`}</div>`;
+  $("productSearch").oninput=e=>openProvider(current.id,e.target.value);
+  $("bottom").style.display="block";updateCart();
+}
+function changeQty(id,delta){cart[id]=Math.max(0,(cart[id]||0)+delta);if(!cart[id])delete cart[id];const el=$("q-"+slug(id));if(el)el.textContent=cart[id]||0;updateCart()}
+function updateCart(){const total=Object.values(cart).reduce((a,b)=>a+b,0);$("cartCount").textContent=total+" uds."}
+function selectedRows(){return Object.entries(cart).map(([id,q])=>({a:articles.find(x=>String(x.id)===String(id)),q})).filter(x=>x.a).sort((x,y)=>x.a.name.localeCompare(y.a.name,"es",{sensitivity:"base"}))}
+function buildOrderText(){return `Hola, soy Salva, te mando el pedido del Hotel Yaramar:\n\n${selectedRows().map(x=>`${x.q} ${x.a.name}`).join("\n")}\n\nGracias, un Saludo`}
+function openSummary(){
+  if(!current||!Object.keys(cart).length){toast("Añade al menos un artículo");return}
+  const rows=selectedRows(),message=buildOrderText();
+  $("sheet").innerHTML=`<div class="summaryBrand"><div class="summaryLogo"><img src="${LOGO}" alt="Hotel Yaramar"></div><div><strong>HOTEL YARAMAR</strong><small>ML Hoteles · Pedido de economato</small></div></div>
+  <h2>Resumen del pedido</h2><div class="sub">Proveedor: ${esc(current.name)}</div>
+  <div class="summary">${rows.map(x=>`<div class="sumrow"><strong>${x.q}</strong><span>${esc(x.a.name)}</span></div>`).join("")}</div>
+  <div class="messagePreview">${esc(message)}</div>
+  <div class="actions">${current.whatsapp?`<button class="action wa" onclick="sendOrder('whatsapp')">📱 WhatsApp</button>`:""}${current.email?`<button class="action mail" onclick="sendOrder('email')">✉️ Email</button>`:""}</div>
+  ${!current.whatsapp&&!current.email?`<div class="empty">Este proveedor no tiene WhatsApp ni email configurado.</div>`:""}
+  <button class="secondary" onclick="closeModal()">Seguir modificando</button>`;
+  $("modal").classList.add("show");
+}
+function saveLocalOrder(channel,rows){
+  const history=JSON.parse(localStorage.getItem("economato_orders")||"[]");
+  history.unshift({
+    id:Date.now(),
+    date:new Date().toLocaleString("es-ES"),
+    provider:current.name,
+    items:Object.fromEntries(rows.map(x=>[x.a.name,x.q])),
+    channel
+  });
+  localStorage.setItem("economato_orders",JSON.stringify(history.slice(0,100)));
+}
+
+async function sendOrder(channel){
+  const rows=selectedRows();
+  const text=buildOrderText();
+
+  if(!rows.length){
+    toast("El pedido está vacío");
+    return;
+  }
+
+  saveLocalOrder(channel,rows);
+
+  if(channel==="whatsapp"){
+    const digits=String(current.whatsapp||"").replace(/\D/g,"").replace(/^34/,"");
+    if(!digits){
+      toast("Este proveedor no tiene WhatsApp configurado");
+      return;
+    }
+
+    // Abrimos WhatsApp ANTES de esperar a Google Apps Script.
+    // Así el navegador no bloquea la ventana por una petición asíncrona.
+    const waUrl="https://wa.me/34"+digits+"?text="+encodeURIComponent(text);
+    const waWindow=window.open(waUrl,"_blank");
+
+    // Guardamos el pedido en segundo plano.
+    apiPost({
+      accion:"crear_pedido",
+      proveedor_id:current.id,
+      proveedor_nombre:current.name,
+      canal:"whatsapp",
+      destinatario:current.whatsapp,
+      lineas:rows.map(x=>({articulo_id:x.a.id,articulo_nombre:x.a.name,cantidad:x.q}))
+    }).catch(e=>console.error("No se pudo guardar el pedido:",e));
+
+    if(!waWindow){
+      window.location.href=waUrl;
+    }
+    toast("WhatsApp preparado");
+    cart={};
+    updateCart();
+    closeModal();
+    return;
+  }
+
+  if(channel==="email"){
+    if(!current.email){
+      toast("Este proveedor no tiene email configurado");
+      return;
+    }
+
+    toast("Enviando email…");
+
+    try{
+      await apiPost({
+        accion:"crear_pedido",
+        proveedor_id:current.id,
+        proveedor_nombre:current.name,
+        canal:"email",
+        destinatario:current.email,
+        lineas:rows.map(x=>({articulo_id:x.a.id,articulo_nombre:x.a.name,cantidad:x.q}))
+      });
+
+      await apiPost({
+        accion:"enviar_email_pedido",
+        email:current.email,
+        email_copia:current.emailCopia||"",
+        proveedor:current.name,
+        items:rows.map(x=>({nombre:x.a.name,cantidad:x.q})),
+        mensaje:text
+      });
+
+      toast("Email enviado correctamente");
+    }catch(e){
+      console.error(e);
+
+      // Si el envío HTML del servidor falla, abrimos el correo del usuario
+      // como respaldo, sin perder el pedido.
+      const cc=current.emailCopia?`&cc=${encodeURIComponent(current.emailCopia)}`:"";
+      const mailto="mailto:"+encodeURIComponent(current.email)+
+        "?subject="+encodeURIComponent("Pedido "+current.name)+
+        "&body="+encodeURIComponent(text)+cc;
+      window.location.href=mailto;
+      toast("Se abrió el correo como respaldo");
+    }
+
+    cart={};
+    updateCart();
+    closeModal();
+  }
+}
+
+function openAdmin(){
+  $("sheet").innerHTML=`<h2>Administración</h2><div class="sub">Gestiona proveedores y artículos. Los cambios se guardan en Google Sheets.</div><div class="adminGrid">
+  <button class="adminCard" onclick="formProveedor()"><strong>➕ Nuevo proveedor</strong><small>Añadir proveedor</small></button>
+  <button class="adminCard" onclick="formArticulo()"><strong>➕ Nuevo artículo</strong><small>Añadir artículo</small></button>
+  <button class="adminCard" onclick="listProviders()"><strong>✏️ Proveedores</strong><small>Modificar o desactivar</small></button>
+  <button class="adminCard" onclick="listArticles()"><strong>✏️ Artículos</strong><small>Modificar o desactivar</small></button>
+  </div><button class="secondary" onclick="closeModal()">Cerrar</button>`;
+  $("modal").classList.add("show");
+}
+function formProveedor(editId=""){
+  const p=editId?providers.find(x=>String(x.id)===String(editId)):null;
+  $("sheet").innerHTML=`<h2>${p?"Modificar proveedor":"Nuevo proveedor"}</h2><div class="sub">Puedes poner WhatsApp, email o ambos.</div>
+  <div class="form"><div><label>Nombre *</label><input id="p_nombre" value="${esc(p?p.name:"")}" placeholder="Ej. Coca Cola"></div>
+  <div><label>WhatsApp</label><input id="p_whatsapp" inputmode="tel" value="${esc(p?p.whatsapp:"")}" placeholder="Ej. 34600123456"></div>
+  <div><label>Email</label><input id="p_email" type="email" value="${esc(p?p.email:"")}" placeholder="pedidos@proveedor.com"></div>
+  <div><label>Email para copia</label><input id="p_copia" type="email" value="${esc(p?p.emailCopia:"")}" placeholder="jefe@hotel.com"></div>
+  <button class="primary" onclick="${p?`guardarProveedorEdit('${escAttr(p.id)}')`:"crearProveedorApp()"}">${p?"💾 Guardar cambios":"💾 Guardar proveedor"}</button>
+  <button class="secondary" onclick="${p?"listProviders()":"openAdmin()"}">Volver</button></div>`;
+}
+async function crearProveedorApp(){
+  const nombre=$("p_nombre").value.trim(),
+        whatsapp=$("p_whatsapp").value.trim(),
+        email=$("p_email").value.trim(),
+        copia=$("p_copia").value.trim();
+
+  if(!nombre){toast("Escribe el nombre del proveedor");return}
+  if(!whatsapp&&!email){toast("Introduce WhatsApp, email o ambos");return}
+
+  try{
+    const r=await apiPost({
+      accion:"crear_proveedor",
+      nombre,
+      whatsapp,
+      email,
+      email_copia:copia,
+      canal:whatsapp&&email?"ambos":whatsapp?"whatsapp":"email",
+      contacto:whatsapp||email
+    });
+
+    // Actualizamos la memoria local sin volver a descargar toda la base.
+    providers.push({
+      id:r.id,
+      name:nombre,
+      whatsapp,
+      email,
+      emailCopia:copia,
+      active:true
+    });
+    providers.sort((a,b)=>a.name.localeCompare(b.name,"es",{sensitivity:"base"}));
+
+    formProveedor();
+    toast("Proveedor creado · puedes añadir otro");
+  }catch(e){
+    toast("No se pudo guardar: "+e.message);
+  }
+}
+async function guardarProveedorEdit(id){
+  const nombre=$("p_nombre").value.trim(),
+        whatsapp=$("p_whatsapp").value.trim(),
+        email=$("p_email").value.trim(),
+        copia=$("p_copia").value.trim();
+
+  if(!nombre){toast("Escribe el nombre");return}
+  if(!whatsapp&&!email){toast("Introduce WhatsApp, email o ambos");return}
+
+  try{
+    await apiPost({
+      accion:"editar_proveedor",
+      id,
+      nombre,
+      whatsapp,
+      email,
+      email_copia:copia,
+      canal:whatsapp&&email?"ambos":whatsapp?"whatsapp":"email",
+      contacto:whatsapp||email
+    });
+
+    const p=providers.find(x=>String(x.id)===String(id));
+    if(p){
+      p.name=nombre;
+      p.whatsapp=whatsapp;
+      p.email=email;
+      p.emailCopia=copia;
+    }
+    providers.sort((a,b)=>a.name.localeCompare(b.name,"es",{sensitivity:"base"}));
+
+    listProviders();
+    toast("Proveedor modificado");
+  }catch(e){
+    toast("No se pudo modificar: "+e.message);
+  }
+}
+function formArticulo(editId=""){
+  if(!providers.length){$("sheet").innerHTML=`<h2>Nuevo artículo</h2><div class="empty">Primero crea un proveedor.</div><button class="primary" onclick="formProveedor()">Crear proveedor</button>`;return}
+  const a=editId?articles.find(x=>String(x.id)===String(editId)):null;
+  $("sheet").innerHTML=`<h2>${a?"Modificar artículo":"Nuevo artículo"}</h2><div class="sub">Los cambios se guardan directamente en ARTICULOS.</div><div class="form">
+  <div><label>Proveedor *</label><select id="a_proveedor">${providers.map(p=>`<option value="${escAttr(p.id)}" ${a&&String(a.providerId)===String(p.id)?"selected":""}>${esc(p.name)}</option>`).join("")}</select></div>
+  <div><label>Nombre *</label><input id="a_nombre" value="${esc(a?a.name:"")}" placeholder="Ej. Coca Cola 330 ml"></div>
+  <div><label>Código</label><input id="a_codigo" value="${esc(a?a.codigo:"")}"></div>
+  <div><label>Formato</label><input id="a_formato" value="${esc(a?a.formato:"")}"></div>
+  <div><label>Unidad</label><input id="a_unidad" value="${esc(a?a.unidad:"")}"></div>
+  <div><label>Observaciones</label><textarea id="a_obs">${esc(a?a.observaciones:"")}</textarea></div>
+  <button class="primary" onclick="${a?`guardarArticuloEdit('${escAttr(a.id)}')`:"crearArticuloApp()"}">${a?"💾 Guardar cambios":"💾 Guardar artículo"}</button>
+  <button class="secondary" onclick="${a?"listArticles()":"openAdmin()"}">Volver</button></div>`;
+}
+async function crearArticuloApp(){
+  const proveedor_id=$("a_proveedor").value,
+        nombre=$("a_nombre").value.trim(),
+        codigo=$("a_codigo").value.trim(),
+        formato=$("a_formato").value.trim(),
+        unidad=$("a_unidad").value.trim(),
+        observaciones=$("a_obs").value.trim();
+
+  if(!proveedor_id||!nombre){toast("Selecciona proveedor y escribe el nombre");return}
+
+  try{
+    const r=await apiPost({
+      accion:"crear_articulo",
+      proveedor_id,
+      nombre,
+      codigo,
+      formato,
+      unidad,
+      observaciones
+    });
+
+    articles.push({
+      id:r.id,
+      providerId:proveedor_id,
+      name:nombre,
+      codigo,
+      formato,
+      unidad,
+      observaciones,
+      active:true
+    });
+    articles.sort((a,b)=>a.name.localeCompare(b.name,"es",{sensitivity:"base"}));
+
+    formArticulo();
+    toast("Artículo creado · puedes añadir otro");
+  }catch(e){
+    toast("No se pudo guardar: "+e.message);
+  }
+}
+async function guardarArticuloEdit(id){
+  const proveedor_id=$("a_proveedor").value,
+        nombre=$("a_nombre").value.trim(),
+        codigo=$("a_codigo").value.trim(),
+        formato=$("a_formato").value.trim(),
+        unidad=$("a_unidad").value.trim(),
+        observaciones=$("a_obs").value.trim();
+
+  if(!proveedor_id||!nombre){toast("Faltan proveedor o nombre");return}
+
+  try{
+    await apiPost({
+      accion:"editar_articulo",
+      id,
+      proveedor_id,
+      nombre,
+      codigo,
+      formato,
+      unidad,
+      observaciones
+    });
+
+    const a=articles.find(x=>String(x.id)===String(id));
+    if(a){
+      a.providerId=proveedor_id;
+      a.name=nombre;
+      a.codigo=codigo;
+      a.formato=formato;
+      a.unidad=unidad;
+      a.observaciones=observaciones;
+    }
+    articles.sort((a,b)=>a.name.localeCompare(b.name,"es",{sensitivity:"base"}));
+
+    listArticles();
+    toast("Artículo modificado");
+  }catch(e){
+    toast("No se pudo modificar: "+e.message);
+  }
+}
+function listProviders(){
+  $("sheet").innerHTML=`<h2>Proveedores</h2><div class="sub">${providers.length} activos</div>${providers.length?providers.map(p=>`<div class="listitem"><div><strong>${esc(p.name)}</strong><small>${p.whatsapp?"📱 "+esc(p.whatsapp):""}${p.whatsapp&&p.email?" · ":""}${p.email?"✉️ "+esc(p.email):""}</small></div><div class="listbuttons"><button class="mini" onclick="formProveedor('${escAttr(p.id)}')">Editar</button><button class="mini red" onclick="desactivarProveedor('${escAttr(p.id)}')">×</button></div></div>`).join(""):`<div class="empty">No hay proveedores activos.</div>`}<button class="primary" onclick="formProveedor()">+ Nuevo proveedor</button><button class="secondary" onclick="openAdmin()">Volver</button>`;
+}
+function listArticles(){
+  $("sheet").innerHTML=`<h2>Artículos</h2><div class="sub">${articles.length} activos</div>${articles.length?articles.map(a=>{const p=providers.find(x=>String(x.id)===String(a.providerId));return `<div class="listitem"><div><strong>${esc(a.name)}</strong><small>${p?esc(p.name):"Sin proveedor"}${a.formato?" · "+esc(a.formato):""}</small></div><div class="listbuttons"><button class="mini" onclick="formArticulo('${escAttr(a.id)}')">Editar</button><button class="mini red" onclick="desactivarArticulo('${escAttr(a.id)}')">×</button></div></div>`}).join(""):`<div class="empty">No hay artículos activos.</div>`}<button class="primary" onclick="formArticulo()">+ Nuevo artículo</button><button class="secondary" onclick="openAdmin()">Volver</button>`;
+}
+async function desactivarProveedor(id){
+  if(!confirm("¿Desactivar este proveedor? No se borrará del historial."))return;
+  try{
+    await apiPost({accion:"eliminar_proveedor",id});
+    providers=providers.filter(p=>String(p.id)!==String(id));
+    articles=articles.filter(a=>String(a.providerId)!==String(id));
+    listProviders();
+    toast("Proveedor desactivado");
+  }catch(e){
+    toast("No se pudo desactivar: "+e.message);
+  }
+}
+async function desactivarArticulo(id){
+  if(!confirm("¿Desactivar este artículo? No se borrará del historial."))return;
+  try{
+    await apiPost({accion:"eliminar_articulo",id});
+    articles=articles.filter(a=>String(a.id)!==String(id));
+    listArticles();
+    toast("Artículo desactivado");
+  }catch(e){
+    toast("No se pudo desactivar: "+e.message);
+  }
+}
+function showHistory(){
+  const h=JSON.parse(localStorage.getItem("economato_orders")||"[]");
+  $("sheet").innerHTML=`<h2>Historial de pedidos</h2><div class="sub">Pedidos realizados desde este dispositivo.</div><div class="history">${h.length?h.map(o=>`<div class="order"><div class="orderhead"><strong>${esc(o.provider)}</strong><small>${esc(o.date)}</small></div><small>${Object.values(o.items).reduce((a,b)=>a+b,0)} unidades · ${esc(o.channel)}</small></div>`).join(""):`<div class="empty">Todavía no hay pedidos.</div>`}</div><button class="secondary" onclick="closeModal()">Cerrar</button>`;
+  $("modal").classList.add("show");
+}
+function closeModal(){$("modal").classList.remove("show")}
+$("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal()});
+function slug(s){try{return btoa(unescape(encodeURIComponent(String(s)))).replace(/[^a-zA-Z0-9]/g,"").slice(0,30)}catch(e){return String(s).replace(/\W/g,"").slice(0,30)}}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function escAttr(s){return esc(s).replace(/`/g,"&#96;")}
+function toast(t){const x=$("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),2800)}
+async function start(){try{await cargarDatos();renderHome()}catch(e){setError(e);renderHome()}}
+start();
+</script>
+</body>
+</html>
