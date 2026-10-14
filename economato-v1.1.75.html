@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<meta content="#073b78" name="theme-color"/>
+<title>ECONOMATO · Multi-Hotel · V1.1.75</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=Mr+De+Haviland&display=swap');
+
+:root {
+  --navy: #073b78;
+  --navy2: #0b4c91;
+  --gold: #b99152;
+  --ink: #17385f;
+  --muted: #6d8097;
+  --bg: #f6f4ef;
+  --card: rgba(255,255,255,.94);
+  --line: #dfe5ec;
+  --green: #0b9b68;
+  --greenSoft: #e4f7ee;
+  --amber: #f5b400;
+  --amberSoft: #fff5d7;
+  --red: #ef4444;
+  --redSoft: #ffe7e7;
+  --shadow: 0 12px 35px rgba(18,51,87,.09);
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: Inter, system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; font-family: var(--sans); color: var(--ink); background: #f6f4ef; }
+body { overflow-x: hidden; }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+
+.app { min-height: 100vh; }
+
+.modal { 
+  position: fixed; 
+  inset: 0; 
+  background: rgba(4,23,48,.58); 
+  backdrop-filter: blur(7px); 
+  display: none; 
+  align-items: center; 
+  justify-content: center; 
+  z-index: 200; 
+  padding: 22px; 
+}
+.modal.show { display: flex; }
+
+.sheet { 
+  width: min(760px, 100%); 
+  max-height: 92vh; 
+  overflow: auto; 
+  background: #fff; 
+  border-radius: 26px; 
+  padding: 24px; 
+  box-shadow: 0 30px 90px rgba(0,0,0,.25); 
+}
+
+.toast { 
+  position: fixed; 
+  left: 50%; 
+  bottom: 24px; 
+  transform: translate(-50%, 20px); 
+  opacity: 0; 
+  pointer-events: none; 
+  background: #092e59; 
+  color: #fff; 
+  padding: 12px 17px; 
+  border-radius: 999px; 
+  z-index: 500; 
+  font-size: 12px; 
+  transition: .2s; 
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ==========================================================================
+   1. PANTALLA DE BIENVENIDA (ESTILO EDITORIAL DE LUJO V1.1.75)
+   ========================================================================== */
+.welcomeScreen {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 21.5% minmax(0,57%) 21.5%;
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+  color: var(--navy);
+  background: #dfeef6 url("data:image/jpeg;base64,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") center center / cover no-repeat;
+}
+
+.welcomeScreen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(223,238,246,0.2) 100%);
+  z-index: 1;
+}
+
+.welcomeScreen > * { position: relative; z-index: 2; }
+
+.welcomeScreen .welcomeMain {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+/* --- FORZADO ESTRICTO DE ESTILOS EDITORIALES DE LUJO (V1.1.75) --- */
+.welcomeScreen h1 {
+  font-family: var(--serif) !important;
+  font-weight: 600 !important;
+  font-size: 56px !important;
+  letter-spacing: 0.15em !important;
+  text-transform: uppercase !important;
+  color: var(--ink) !important;
+  margin: 0 0 10px 0;
+  text-align: center;
+}
+
+.welcomeScreen .subtitle {
+  font-size: 18px;
+  color: var(--muted);
+  margin-bottom: 48px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-align: center;
+}
+
+.hotelGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  width: 100%;
+}
+
+.hotelCard {
+  background: var(--card);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.7);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s;
+}
+
+.hotelCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 45px rgba(18,51,87,0.15);
+}
+
+.hotelCard img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.hotelCard .hotelInfo {
+  padding: 24px;
+  text-align: center;
+}
+
+.hotelCard .hotelInfo span {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  font-weight: 700;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.hotelCard .hotelInfo strong {
+  font-family: var(--serif) !important;
+  font-weight: 600 !important;
+  font-size: 32px !important;
+  letter-spacing: 0.15em !important;
+  text-transform: uppercase !important;
+  color: var(--ink) !important;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.hotelCard .hotelInfo p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.hotelCard .hotelAction {
+  padding: 0 24px 24px 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.circleBtn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: background 0.2s;
+}
+.circleBtn:hover { background: var(--navy2); }
+
+.welcomeScreen .welcomeLeft {
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 60px 40px;
+  border-right: 1px solid rgba(7,59,120,0.08);
+}
+
+.brandBlock .logoText {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-top: 12px;
+}
+
+.brandBlock .logoSub {
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+.welcomeLeft .leftFooter {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--navy);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.welcomeScreen .welcomeRight {
+  grid-column: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 40px;
+  border-left: 1px solid rgba(7,59,120,0.08);
+}
+
+.rightPromo { margin-bottom: 80px; }
+
+.rightPromo span {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  font-weight: 700;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.rightPromo h3 {
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin: 0;
+  font-weight: 700;
+}
+
+.rightPromo .divider {
+  width: 35px;
+  height: 2px;
+  background: var(--gold);
+  margin: 16px 0;
+}
+
+/* Lema Manuscribo Exclusivo */
+.serifQuote {
+  font-family: 'Mr De Haviland', cursive;
+  font-size: 52px;
+  line-height: 0.8;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+
+/* Lema Secundario en Blanco Puro en Dashboard (Inyectado en V1.1.75) */
+.heroTaglineV119.dashboardHeroBrandV146 small,
+.welcomeRight .heroTagline small {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.45em;
+  color: var(--muted);
+  font-weight: 600;
+  display: block;
+}
+
+.welcomeScreen .welcomeFooter {
+  grid-column: 1 / span 3;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(7,59,120,0.08);
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.welcomeScreen .versionBadge {
+  background: #fff;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-weight: 700;
+  color: var(--navy);
+  border: 1px solid var(--line);
+}
+
+/* ==========================================================================
+   2. INTERFAZ PRINCIPAL / DASHBOARD MODO INTEGRADO
+   ========================================================================== */
+.dashboard { display: none; min-height: 100vh; }
+.dashboard.show { display: flex; }
+
+.sidebar {
+  width: 260px;
+  background: #fff;
+  border-right: 1px solid var(--line);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+}
+
+.sidebar .hotelHeader {
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 24px;
+}
+
+.sidebar .hotelHeader span {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.sidebar .hotelHeader h2 {
+  margin: 4px 0 0 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.menuList { list-style: none; padding: 0; margin: 0; flex: 1; }
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 6px;
+  transition: .2s;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+
+.menuItem:hover { background: var(--bg); }
+.menuItem.active { background: var(--navy); color: #fff; }
+
+.sidebar .sidebarFooter {
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.mainContent {
+  flex: 1;
+  margin-left: 260px;
+  padding: 40px;
+  min-height: 100vh;
+}
+
+/* ==========================================================================
+   3. ESTILOS COHERENTES PARA CONTENEDORES Y TABLAS (V1.1.75)
+   ========================================================================== */
+.viewSection { display: none; }
+.viewSection.show { display: block; }
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.pageTitle h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.pageTitle p {
+  margin: 4px 0 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ALINEACIÓN IZQUIERDA OBLIGATORIA DE "PEDIDOS DE HOY" (Inyectado en V1.1.75) */
+.dashboardHomeMode #dashboardBody .pageTitle.dashboardTodayTitleV147 {
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: flex-end !important;
+  text-align: left !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+.dashboardHomeMode #dashboardBody .dashboardTodayTitleV147 > div {
+  flex: 0 1 auto !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  text-align: left !important;
+}
+
+.dashboardHomeMode #dashboardBody .dashboardTodayTitleV147 h1 {
+  text-align: left !important;
+  margin-left: 0 !important;
+}
+
+.contentCard {
+  background: #fff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+}
+
+.tableWrapper { overflow-x: auto; }
+
+table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+
+th {
+  padding: 14px 16px;
+  font-weight: 600;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+
+td { padding: 16px; border-bottom: 1px solid var(--line); color: var(--ink); }
+
+tr:last-child td { border-bottom: none; }
+
+.statusBadge {
+  padding: 6px 12px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-block;
+}
+
+.statusBadge.enviado { background: var(--amberSoft); color: #d97706; }
+.statusBadge.finalizado { background: var(--greenSoft); color: var(--green); }
+.statusBadge.borrador { background: #eee; color: #666; }
+
+/* ==========================================================================
+   4. CONTRRASTE EXIGIDO PARA EL WIDGET DEL TIEMPO (V1.1.75)
+   ========================================================================== */
+#dashboardDateV119,
+#dashboardTimeV119,
+#weatherTempV119,
+#weatherConditionV119,
+.weatherV119 .weatherLocationV119 {
+  color: var(--ink) !important;
+  -webkit-text-fill-color: var(--ink) !important;
+  text-shadow: none !important;
+}
+
+#weatherIconV119,
+.weatherV119 .weatherIconV119 {
+  color: var(--amber, #f5b400) !important;
+  -webkit-text-fill-color: var(--amber, #f5b400) !important;
+  text-shadow: none !important;
+}
+
+/* SATELLITE STYLES FOR THE HERO EMBLEM */
+.dashboardHomeMode .heroTaglineV119.dashboardHeroBrandV146 small {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ==========================================================================
+   5. CONGELACIÓN TEMPORAL DE SECCIONES (display: none - V1.1.75)
+   ========================================================================== */
+#menuItemMisPedidos, 
+#sectionMisPedidos {
+  display: none !important;
+}
+
+</style>
+</head>
+<body class="loginMode">
+
+    <div id="welcomeScreen" class="welcomeScreen">
+      <div class="welcomeLeft">
+        <div class="brandBlock">
+          <svg width="46" height="40" viewBox="0 0 46 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 40L14 0H18L9 40H0Z" fill="#073b78"/>
+            <path d="M13 40L27 0H31L22 40H13Z" fill="#073b78"/>
+            <path d="M26 40L40 0H44L35 40H26Z" fill="#b99152"/>
+          </svg>
+          <div class="logoText">ML HOTELES</div>
+          <div class="logoSub">Economato Centralizado</div>
+        </div>
+        <div class="leftFooter">
+          EL MEDITERRÁNEO<br>NOS INSPIRA<br>CADA DÍA
+        </div>
+      </div>
+
+      <div class="welcomeMain">
+        <h1>Bienvenido</h1>
+        <div class="subtitle">Selecciona tu hotel para continuar</div>
+        
+          <div class="hotelCard" onclick="seleccionarHotel('YARAMAR', 'Hotel Yaramar')">
+            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=cover&w=600&q=80" alt="Hotel Yaramar">
+            <div class="hotelInfo">
+              <span>Establecimiento</span>
+              <strong>Yaramar</strong>
+              <p>Gestión de pedidos e inventario</p>
+            </div>
+            <div class="hotelAction">
+              <button class="circleBtn">➔</button>
+            </div>
+          </div>
+          
+          <div class="hotelCard" onclick="seleccionarHotel('ANGELA', 'Hotel Ángela')">
+            <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=cover&w=600&q=80" alt="Hotel Ángela">
+            <div class="hotelInfo">
+              <span>Establecimiento</span>
+              <strong>Angela</strong>
+              <p>Gestión de pedidos e inventario</p>
+            </div>
+            <div class="hotelAction">
+              <button class="circleBtn">➔</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="welcomeRight">
+        <div class="rightPromo">
+          <span>Concepto</span>
+          <h3>Dos Hoteles</h3>
+          <h3>Una misma esencia</h3>
+          <div class="divider"></div>
+          <div class="serifQuote">Más que un hotel</div>
+          <small>Una experiencia</small>
+        </div>
+      </div>
+
+      <div class="welcomeFooter">
+        <div>© 2026 Salvador González Novoa · Creador y titular del software ECONOMATO · Todos los derechos reservados.</div>
+        <div class="versionBadge">V1.1.75</div>
+      </div>
+    </div>
+
+    <div id="dashboard" class="dashboard">
+      <div class="sidebar">
+        <div class="hotelHeader">
+          <span>Conectado a</span>
+          <h2 id="activeHotelName">Cargando...</h2>
+        </div>
+        
+        <nav class="menuList">
+          <button class="menuItem active" onclick="cambiarVista('inicio')">🏠 Inicio</button>
+          <button class="menuItem" onclick="cambiarVista('borrador')">📝 Borrador</button>
+          <button class="menuItem" onclick="cambiarVista('nuevo')">🛒 Nuevo pedido</button>
+          <button class="menuItem" onclick="cambiarVista('articulos')">📦 Artículos</button>
+          <button class="menuItem" onclick="cambiarVista('agenda')">📅 Calendario-Agenda</button>
+          <button id="menuItemMisPedidos" class="menuItem" onclick="cambiarVista('mispedidos')">📄 Mis pedidos</button>
+          <button class="menuItem" onclick="cambiarVista('config')">⚙️ Configuración</button>
+          <button class="menuItem" onclick="cambiarVista('informes')">📊 Informes</button>
+        </nav>
+
+        <div class="sidebarFooter">
+          <button class="menuItem" style="margin-bottom:0;color:var(--red);" onclick="cerrarSesion()">➔ Cerrar sesión</button>
+        </div>
+      </div>
+
+      <div class="mainContent">
+        <div id="view-inicio" class="viewSection show dashboardHomeMode">
+          <div class="pageHeader">
+            <div class="pageTitle dashboardTodayTitleV147">
+              <p>ECONOMATO · GESTIÓN DE PEDIDOS</p>
+              <h1 id="dashboardGreeting">Buenas tardes, SALVA</h1>
+            </div>
+            
+            <div class="weatherV119" style="text-align: right; font-weight: 600;">
+              <div id="dashboardDateV119">Miércoles, 14 de Octubre de 2026</div>
+              <div id="dashboardTimeV119" style="font-size: 24px; font-weight: 800;">19:10</div>
+              <div style="display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-top: 4px;">
+                <span id="weatherIconV119" style="font-size: 20px;">☀️</span>
+                <span id="weatherTempV119">24°C</span>
+                <span id="weatherConditionV119" style="color:var(--muted); font-size: 12px;">Despejado · Fuengirola</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contentCard">
+            <h3 style="margin-top: 0; margin-bottom: 20px; font-size: 18px; font-weight: 700;">Pedidos de Hoy</h3>
+            <div class="tableWrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Proveedor</th>
+                    <th>Nº Pedido</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                  </tr>
+                </thead>
+                <tbody id="table-pedidos-hoy">
+                  <tr>
+                    <td>SALVA TEST</td>
+                    <td>PED-20261014163753-103</td>
+                    <td><span class="statusBadge enviado">Enviado</span></td>
+                    <td>14/10/2026</td>
+                  </tr>
+                  <tr>
+                    <td>SALVA TEST</td>
+                    <td>PED-20261014163609-578</td>
+                    <td><span class="statusBadge enviado">Enviado</span></td>
+                    <td>14/10/2026</td>
+                  </tr>
+                  <tr>
+                    <td>Aceites el Niño</td>
+                    <td>PED-20261014085215-063</td>
+                    <td><span class="statusBadge finalizado">Finalizado</span></td>
+                    <td>14/10/2026</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="view-borrador" class="viewSection">
+          <div class="pageHeader"><div class="pageTitle"><h1>Borrador de Pedidos</h1><p>Gestione las cargas guardadas provisionalmente.</p></div></div>
+        </div>
+        <div id="view-nuevo" class="viewSection">
+          <div class="pageHeader"><div class="pageTitle"><h1>Nuevo Pedido</h1><p>Seleccione un proveedor para comenzar el pedido.</p></div></div>
+        </div>
+        <div id="view-articulos" class="viewSection">
+          <div class="pageHeader"><div class="pageTitle"><h1>Catálogo de Artículos</h1><p>Consulte y gestione las unidades de economato.</p></div></div>
+        </div>
+        <div id="view-agenda" class="viewSection">
+          <div class="pageHeader"><div class="pageTitle"><h1>Calendario y Agenda</h1><p>Planificación de entregas, cierres y pósits de tareas diarias.</p></div></div>
+        </div>
+        <div id="view-config" class="viewSection">
+          <div class="pageHeader"><div class="pageTitle"><h1>Configuración del Sistema</h1><p>Ajustes generales del Economato Centralizado.</p></div></div>
+        </div>
+        <div id="view-informes" class="viewSection">
+          <div class="pageHeader"><div class="pageTitle"><h1>Resumen Diario de Operaciones</h1><p>Análisis de cierres de jornadas e informes de gestión.</p></div></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // --- LÓGICA CORE DE NAVEGACIÓN ---
+    var hotelActivo = "";
+
+    function seleccionarHotel(id, nombre) {
+      hotelActivo = id;
+      document.getElementById('activeHotelName').innerText = nombre;
+      document.getElementById('welcomeScreen').style.display = 'none';
+      document.body.className = 'dashboardMode';
+      document.getElementById('dashboard').classList.add('show');
+      mostrarToast("Conectado con éxito a " + nombre);
+    }
+
+    function cambiarVista(vistaId) {
+      var secciones = document.querySelectorAll('.viewSection');
+      secciones.forEach(function(sec) { sec.classList.remove('show'); });
+      
+      var botones = document.querySelectorAll('.menuItem');
+      botones.forEach(function(btn) { btn.classList.remove('active'); });
+
+      var seccionActiva = document.getElementById('view-' + vistaId);
+      if (seccionActiva) seccionActiva.classList.add('show');
+      
+      if (event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+      }
+    }
+
+    function cerrarSesion() {
+      document.getElementById('dashboard').classList.remove('show');
+      document.body.className = 'loginMode';
+      document.getElementById('welcomeScreen').style.display = 'grid';
+      hotelActivo = "";
+      mostrarToast("Sesión cerrada");
+    }
+
+    function mostrarToast(msg) {
+      var t = document.getElementById('toast');
+      t.innerText = msg;
+      t.classList.add('show');
+      setTimeout(function() { t.classList.remove('show'); }, 3000);
+    }
+  </script>
+</body>
+</html>
